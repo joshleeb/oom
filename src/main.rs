@@ -37,7 +37,7 @@ fn main() {
 
     let professor = Spritesheet::<PokemonSpritesheet>::from_spritesheet(
         &texture_creator,
-        "assets/professor.bmp",
+        "assets/professor.png",
     );
 
     clear_canvas(&mut canvas);

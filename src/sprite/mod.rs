@@ -1,7 +1,6 @@
-use sdl2::pixels::Color;
+use sdl2::image::LoadTexture;
 use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture, TextureCreator};
-use sdl2::surface::Surface;
 use sdl2::video::{Window, WindowContext};
 use std::marker::PhantomData;
 use std::path::Path;
@@ -12,13 +11,7 @@ pub trait SpritesheetLayout {
     type Sprite;
 
     fn get_dimensions() -> (usize, usize);
-
     fn get_sprite(Self::Sprite) -> Rect;
-
-    fn remove_background(surface: &mut Surface) {
-        let color_key = surface.with_lock(|p| Color::RGB(p[2], p[1], p[0]));
-        surface.set_color_key(true, color_key).unwrap();
-    }
 }
 
 pub struct Spritesheet<'t, SL> {
@@ -31,11 +24,8 @@ impl<'t, SL: SpritesheetLayout> Spritesheet<'t, SL> {
         texture_creator: &'t TextureCreator<WindowContext>,
         spritesheet: &str,
     ) -> Self {
-        let mut surface = Surface::load_bmp(Path::new(spritesheet)).unwrap();
-        <SL as SpritesheetLayout>::remove_background(&mut surface);
-
         let texture = texture_creator
-            .create_texture_from_surface(&surface)
+            .load_texture(Path::new(spritesheet))
             .unwrap();
 
         Spritesheet {
