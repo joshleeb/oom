@@ -11,7 +11,7 @@ pub trait SpritesheetLayout {
     type Sprite;
 
     fn get_dimensions() -> (usize, usize);
-    fn get_sprite(Self::Sprite) -> Rect;
+    fn get_sprite(&Self::Sprite) -> Rect;
 }
 
 pub struct Spritesheet<'t, SL> {
@@ -34,14 +34,10 @@ impl<'t, SL: SpritesheetLayout> Spritesheet<'t, SL> {
         }
     }
 
-    pub fn draw_sprite(&self, canvas: &mut Canvas<Window>, sprite: SL::Sprite, x: usize, y: usize) {
-        self.draw_sprite_with_scale(canvas, sprite, 1, x, y)
-    }
-
     pub fn draw_sprite_with_scale(
         &self,
         canvas: &mut Canvas<Window>,
-        sprite: SL::Sprite,
+        sprite: &SL::Sprite,
         scale: usize,
         x: usize,
         y: usize,

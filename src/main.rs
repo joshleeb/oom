@@ -1,16 +1,17 @@
 extern crate sdl2;
 
+use player::Player;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use sprite::Spritesheet;
-use sprite::pokemon::{PokemonSprite, PokemonSpritesheet};
+use sprite::pokemon::PokemonSpritesheet;
 use std::thread;
 use std::time::Duration;
 
 mod sprite;
+mod player;
 
 const SCREEN_HEIGHT: u32 = 600;
 const SCREEN_WIDTH: u32 = 800;
@@ -35,10 +36,9 @@ fn main() {
     let mut canvas = window.into_canvas().accelerated().build().unwrap();
     let texture_creator = canvas.texture_creator();
 
-    let professor = Spritesheet::<PokemonSpritesheet>::from_spritesheet(
-        &texture_creator,
-        "assets/professor.png",
-    );
+    let spritesheet =
+        PokemonSpritesheet::from_spritesheet(&texture_creator, "assets/professor.png");
+    let mut player = Player::new(spritesheet);
 
     clear_canvas(&mut canvas);
     canvas.present();
@@ -52,14 +52,14 @@ fn main() {
                     ..
                 } => break 'main,
                 _ => {}
-            }
+            };
+
+            player.update(event);
         }
 
         clear_canvas(&mut canvas);
 
-        professor.draw_sprite(&mut canvas, PokemonSprite::Back, 0, 0);
-        professor.draw_sprite_with_scale(&mut canvas, PokemonSprite::Front, 4, 100, 100);
-
+        player.render(&mut canvas);
         canvas.present();
 
         thread::sleep(Duration::from_millis(100));
