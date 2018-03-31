@@ -10,8 +10,9 @@ use sprite::pokemon::PokemonSpritesheet;
 use std::thread;
 use std::time::Duration;
 
-mod sprite;
+mod animation;
 mod player;
+mod sprite;
 
 const SCREEN_HEIGHT: u32 = 600;
 const SCREEN_WIDTH: u32 = 800;
@@ -62,6 +63,6 @@ fn main() {
         player.render(&mut canvas);
         canvas.present();
 
-        thread::sleep(Duration::from_millis(100));
+        thread::sleep(Duration::from_millis(1000 / 60));
     }
 }

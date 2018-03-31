@@ -14,7 +14,7 @@ pub trait SpritesheetLayout {
     fn get_sprite(&Self::Sprite) -> Rect;
 }
 
-pub struct Spritesheet<'t, SL> {
+pub struct Spritesheet<'t, SL: SpritesheetLayout> {
     texture: Texture<'t>,
     layout: PhantomData<SL>,
 }
