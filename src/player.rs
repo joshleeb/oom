@@ -13,10 +13,12 @@ pub struct Player<'s> {
     current_sprite: PokemonSprite,
 
     scale: usize,
+    movement_speed: usize,
+
     position_x: usize,
     position_y: usize,
 
-    keys_down: Vec<Keycode>,
+    keydowns: Vec<Keycode>,
 
     walk_back: PokemonAnimation,
     walk_left: PokemonAnimation,
@@ -31,10 +33,12 @@ impl<'s> Player<'s> {
             current_sprite: PokemonSprite::FrontStill,
 
             scale: 4,
+            movement_speed: 12,
+
             position_x: 100,
             position_y: 100,
 
-            keys_down: vec![],
+            keydowns: vec![],
 
             walk_back: PokemonAnimation::new(
                 vec![
@@ -102,7 +106,7 @@ impl<'s> Player<'s> {
     fn handle_keyup(&mut self, keycode: Keycode) {
         self.remove_keydown(keycode);
 
-        if self.keys_down.is_empty() {
+        if self.keydowns.is_empty() {
             self.reset_animation(keycode)
         }
     }
@@ -120,6 +124,14 @@ impl<'s> Player<'s> {
 
         if let Some(sprite) = animation.next_frame() {
             self.current_sprite = sprite.clone();
+
+            match keycode {
+                Keycode::W => self.position_y -= self.movement_speed,
+                Keycode::A => self.position_x -= self.movement_speed,
+                Keycode::S => self.position_y += self.movement_speed,
+                Keycode::D => self.position_x += self.movement_speed,
+                _ => return,
+            };
         }
     }
 
@@ -134,14 +146,14 @@ impl<'s> Player<'s> {
     }
 
     fn add_keydown(&mut self, keycode: Keycode) {
-        if !self.keys_down.contains(&keycode) {
-            self.keys_down.push(keycode);
+        if !self.keydowns.contains(&keycode) {
+            self.keydowns.push(keycode);
         }
     }
 
     fn remove_keydown(&mut self, keycode: Keycode) {
-        if self.keys_down.contains(&keycode) {
-            self.keys_down.remove_item(&keycode);
+        if self.keydowns.contains(&keycode) {
+            self.keydowns.remove_item(&keycode);
         }
     }
 }

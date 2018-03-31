@@ -3,7 +3,6 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 pub struct Animation<T> {
     frames: Vec<T>,
     delta_time: Duration,
-
     frame_index: usize,
     last_update_time: SystemTime,
 }
@@ -13,7 +12,6 @@ impl<T> Animation<T> {
         Animation {
             frames,
             delta_time,
-
             frame_index: 0,
             last_update_time: UNIX_EPOCH,
         }
