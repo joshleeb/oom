@@ -17,6 +17,7 @@ impl<T> Animation<T> {
         }
     }
 
+    // Get the next frame if the `delta_time` duration has passed, otherwise return None.
     pub fn next_frame(&mut self) -> Option<&T> {
         if let Ok(since) = SystemTime::now().duration_since(self.last_update_time) {
             if since < self.delta_time {

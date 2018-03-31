@@ -18,8 +18,13 @@ pub struct Player<'s> {
     position_x: usize,
     position_y: usize,
 
+    // Handle a list of keycodes that are pressed down. Helps when a user presses down multiple
+    // keys, specifically when changing direction. This isn't ideal to manage it within the player
+    // struct and this current implementation doesn't support keys outside of W, A, S, or D, so we
+    // would probably want to abstract this out into our own keyboard build on top of SDL.
     keydowns: Vec<Keycode>,
 
+    // These could be made generic across sprites.
     walk_back: PokemonAnimation,
     walk_left: PokemonAnimation,
     walk_front: PokemonAnimation,
@@ -40,6 +45,7 @@ impl<'s> Player<'s> {
 
             keydowns: vec![],
 
+            // These animation blocks should be refactored using a clever macro.
             walk_back: PokemonAnimation::new(
                 vec![
                     PokemonSprite::BackStill,
@@ -125,6 +131,9 @@ impl<'s> Player<'s> {
         if let Some(sprite) = animation.next_frame() {
             self.current_sprite = sprite.clone();
 
+            // Here we tie movement to animation to sync the player moving on the screen and the
+            // sprite changing for the animation. When doing this properly we will want this to be
+            // the other way round, syncing the animation with movement.
             match keycode {
                 Keycode::W => self.position_y -= self.movement_speed,
                 Keycode::A => self.position_x -= self.movement_speed,
@@ -135,6 +144,7 @@ impl<'s> Player<'s> {
         }
     }
 
+    // This is called when the user lifts a key, causing the player to show a `*Still` sprite.
     fn reset_animation(&mut self, keycode: Keycode) {
         self.current_sprite = match keycode {
             Keycode::W => PokemonSprite::BackStill,

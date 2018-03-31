@@ -47,14 +47,6 @@ fn main() {
     canvas.present();
 
     'main: loop {
-        // let pressed_keycodes: Vec<Keycode> = events
-        //     .keyboard_state()
-        //     .pressed_scancodes()
-        //     .map(|s| Keycode::from_scancode(s))
-        //     .filter(|v| !v.is_none())
-        //     .map(|v| v.unwrap())
-        //     .collect();
-
         for event in events.poll_iter() {
             match event {
                 Event::Quit { .. }
