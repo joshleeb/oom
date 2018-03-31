@@ -16,6 +16,8 @@ pub struct Player<'s> {
     position_x: usize,
     position_y: usize,
 
+    keys_down: Vec<Keycode>,
+
     walk_back: PokemonAnimation,
     walk_left: PokemonAnimation,
     walk_front: PokemonAnimation,
@@ -31,6 +33,8 @@ impl<'s> Player<'s> {
             scale: 4,
             position_x: 100,
             position_y: 100,
+
+            keys_down: vec![],
 
             walk_back: PokemonAnimation::new(
                 vec![
@@ -96,13 +100,16 @@ impl<'s> Player<'s> {
     }
 
     fn handle_keyup(&mut self, keycode: Keycode) {
-        match keycode {
-            Keycode::W | Keycode::A | Keycode::S | Keycode::D => self.reset_animation(keycode),
-            _ => {}
-        };
+        self.remove_keydown(keycode);
+
+        if self.keys_down.is_empty() {
+            self.reset_animation(keycode)
+        }
     }
 
     fn handle_keydown(&mut self, keycode: Keycode) {
+        self.add_keydown(keycode);
+
         let animation = match keycode {
             Keycode::W => &mut self.walk_back,
             Keycode::A => &mut self.walk_left,
@@ -123,6 +130,18 @@ impl<'s> Player<'s> {
             Keycode::S => PokemonSprite::FrontStill,
             Keycode::D => PokemonSprite::RightStill,
             _ => return,
+        }
+    }
+
+    fn add_keydown(&mut self, keycode: Keycode) {
+        if !self.keys_down.contains(&keycode) {
+            self.keys_down.push(keycode);
+        }
+    }
+
+    fn remove_keydown(&mut self, keycode: Keycode) {
+        if self.keys_down.contains(&keycode) {
+            self.keys_down.remove_item(&keycode);
         }
     }
 }
