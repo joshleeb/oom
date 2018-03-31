@@ -12,11 +12,11 @@ pub struct Player<'s> {
     spritesheet: PokemonSpritesheet<'s>,
     current_sprite: PokemonSprite,
 
-    scale: usize,
-    movement_speed: usize,
+    scale: u32,
+    movement_speed: i32,
 
-    position_x: usize,
-    position_y: usize,
+    position_x: i32,
+    position_y: i32,
 
     // Handle a list of keycodes that are pressed down. Helps when a user presses down multiple
     // keys, specifically when changing direction. This isn't ideal to manage it within the player

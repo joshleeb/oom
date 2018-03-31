@@ -10,7 +10,7 @@ pub mod pokemon;
 pub trait SpritesheetLayout {
     type Sprite;
 
-    fn get_dimensions() -> (usize, usize);
+    fn get_dimensions() -> (u32, u32);
     fn get_sprite(&Self::Sprite) -> Rect;
 }
 
@@ -38,18 +38,12 @@ impl<'t, SL: SpritesheetLayout> Spritesheet<'t, SL> {
         &self,
         canvas: &mut Canvas<Window>,
         sprite: &SL::Sprite,
-        scale: usize,
-        x: usize,
-        y: usize,
+        scale: u32,
+        x: i32,
+        y: i32,
     ) {
         let dimensions = <SL as SpritesheetLayout>::get_dimensions();
-
-        let screen_rect = Rect::new(
-            x as i32,
-            y as i32,
-            (dimensions.0 * scale) as u32,
-            (dimensions.1 * scale) as u32,
-        );
+        let screen_rect = Rect::new(x, y, dimensions.0 * scale, dimensions.1 * scale);
 
         canvas
             .copy(

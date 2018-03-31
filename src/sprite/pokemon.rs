@@ -24,12 +24,12 @@ pub enum PokemonSprite {
 
 pub struct PokemonLayout;
 
-const SPRITE_SIZE: usize = 32;
+const SPRITE_SIZE: u32 = 32;
 
 impl SpritesheetLayout for PokemonLayout {
     type Sprite = PokemonSprite;
 
-    fn get_dimensions() -> (usize, usize) {
+    fn get_dimensions() -> (u32, u32) {
         (SPRITE_SIZE, SPRITE_SIZE)
     }
 
