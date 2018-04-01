@@ -1,9 +1,10 @@
 use animation::Animation;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use sprite::orb::{OrbLayout, OrbSprite, OrbSpritesheet};
 use sprite::SpritesheetLayout;
+use sprite::orb::{OrbLayout, OrbSprite, OrbSpritesheet};
 use std::time::Duration;
+use world::InWorld;
 
 pub struct Player<'s> {
     spritesheet: OrbSpritesheet<'s>,
@@ -41,14 +42,20 @@ impl<'s> Player<'s> {
             ),
         }
     }
+}
 
-    pub fn update_animation(&mut self) {
+impl<'a> InWorld for Player<'a> {
+    fn update(&mut self) {
         if let Some(sprite) = self.animation.next_frame() {
             self.current_sprite = sprite.clone();
         }
     }
 
-    pub fn render(&self, canvas: &mut Canvas<Window>) {
+    fn world_position(&self) -> (i32, i32) {
+        (self.world_posx, self.world_posy)
+    }
+
+    fn render(&self, canvas: &mut Canvas<Window>) {
         let screen_size = canvas.output_size().unwrap();
         let sprite_size = <OrbLayout as SpritesheetLayout>::get_dimensions();
 
@@ -56,8 +63,8 @@ impl<'s> Player<'s> {
             canvas,
             &self.current_sprite,
             self.scale,
-            ((screen_size.0 - sprite_size.0) / 2) as i32,   // Screen posX
-            ((screen_size.1 - sprite_size.1) / 2) as i32,   // Screen posY
+            ((screen_size.0 - sprite_size.0) / 2) as i32, // Screen posX
+            ((screen_size.1 - sprite_size.1) / 2) as i32, // Screen posY
         );
     }
 }

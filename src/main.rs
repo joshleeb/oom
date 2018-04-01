@@ -1,4 +1,5 @@
 #![feature(vec_remove_item)]
+#![feature(nll)]
 
 extern crate sdl2;
 
@@ -8,6 +9,7 @@ use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
+use world::World;
 use sprite::orb::OrbSpritesheet;
 use std::thread;
 use std::time::Duration;
@@ -15,6 +17,7 @@ use std::time::Duration;
 mod animation;
 mod player;
 mod sprite;
+mod world;
 
 const SCREEN_HEIGHT: u32 = 600;
 const SCREEN_WIDTH: u32 = 800;
@@ -42,11 +45,14 @@ fn main() {
     let spritesheet = OrbSpritesheet::from_spritesheet(&texture_creator, "assets/orb.png");
     let mut player = Player::new(spritesheet);
 
+    let mut world = World::new();
+    world.add_item(Box::new(&mut player));
+
     clear_canvas(&mut canvas);
     canvas.present();
 
     'main: loop {
-        player.update_animation();
+        world.update();
 
         for event in events.poll_iter() {
             match event {
@@ -57,11 +63,12 @@ fn main() {
                 } => break 'main,
                 _ => {}
             };
+
+            world.update_with_event(&event);
         }
 
         clear_canvas(&mut canvas);
-
-        player.render(&mut canvas);
+        world.render(&mut canvas);
         canvas.present();
 
         thread::sleep(Duration::from_millis(1000 / 60));
