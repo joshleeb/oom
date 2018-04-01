@@ -1,5 +1,7 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
+use tile::Tile;
+use map::Map;
 use sdl2::event::Event;
 use sdl2::rect::Rect;
 
@@ -12,17 +14,13 @@ pub trait InWorld {
     fn render(&self, &mut Canvas<Window>, i32, i32) {}
 }
 
-pub struct World<'i> {
-    items: Vec<Box<&'i mut InWorld>>,
+pub struct World<'a> {
+    items: Vec<Tile<'a>>,
 }
 
-impl<'i> World<'i> {
-    pub fn new() -> Self {
-        World { items: vec![] }
-    }
-
-    pub fn add_item(&mut self, item: Box<&'i mut InWorld>) {
-        self.items.push(item)
+impl<'a> World<'a> {
+    pub fn new(map: Map<'a>) -> Self {
+        World { items: map.tiles() }
     }
 
     pub fn update(&mut self) {

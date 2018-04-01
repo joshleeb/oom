@@ -21,10 +21,7 @@ pub struct Spritesheet<'t, SL: SpritesheetLayout> {
 }
 
 impl<'t, SL: SpritesheetLayout> Spritesheet<'t, SL> {
-    pub fn from_spritesheet(
-        texture_creator: &'t TextureCreator<WindowContext>,
-        spritesheet: &str,
-    ) -> Self {
+    pub fn new(texture_creator: &'t TextureCreator<WindowContext>, spritesheet: &str) -> Self {
         let texture = texture_creator
             .load_texture(Path::new(spritesheet))
             .unwrap();

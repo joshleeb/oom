@@ -16,15 +16,18 @@ pub struct Tile<'s> {
 }
 
 impl<'s> Tile<'s> {
-    pub fn new(spritesheet: &'s TileSpritesheet<'s>, sprite: TileSprite) -> Self {
+    pub fn new(
+        spritesheet: &'s TileSpritesheet<'s>,
+        sprite: TileSprite,
+        world_posx: i32,
+        world_posy: i32,
+    ) -> Self {
         Tile {
             spritesheet,
             sprite,
-
             scale: 2,
-
-            world_posx: 0,
-            world_posy: 0,
+            world_posx,
+            world_posy,
         }
     }
 }

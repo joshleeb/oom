@@ -7,8 +7,12 @@ pub type TileSpritesheet<'t> = Spritesheet<'t, TileLayout>;
 
 #[derive(Clone, PartialEq)]
 pub enum TileSprite {
+    Cobblestone,
     Grass,
+    Lava,
     Sand,
+    Water,
+    Wood,
 }
 
 pub struct TileLayout;
@@ -22,8 +26,12 @@ impl SpritesheetLayout for TileLayout {
 
     fn get_sprite(spr: &Self::Sprite) -> Rect {
         let grid = match *spr {
+            TileSprite::Cobblestone => (1, 0),
             TileSprite::Grass => (3, 1),
+            TileSprite::Lava => (2, 9),
             TileSprite::Sand => (2, 1),
+            TileSprite::Water => (5, 2),
+            TileSprite::Wood => (0, 2),
         };
 
         Rect::new(
