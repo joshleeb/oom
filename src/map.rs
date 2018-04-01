@@ -46,6 +46,7 @@ fn color_to_sprite(r: u8, g: u8, b: u8) -> Option<TileSprite> {
         (164, 168, 184) => Some(TileSprite::Cobblestone),
         (247, 233, 163) => Some(TileSprite::Sand),
         (255, 0, 0) => Some(TileSprite::Lava),
+        (32, 237, 41) => Some(TileSprite::DiamondOre),
         (64, 64, 255) => Some(TileSprite::Water),
         _ => None,
     }

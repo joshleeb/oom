@@ -25,8 +25,8 @@ mod sprite;
 mod tile;
 mod world;
 
-const SCREEN_HEIGHT: u32 = 600;
-const SCREEN_WIDTH: u32 = 800;
+const SCREEN_HEIGHT: u32 = 800;
+const SCREEN_WIDTH: u32 = 1200;
 
 fn clear_canvas(canvas: &mut Canvas<Window>) {
     canvas.set_draw_color(Color::RGB(0, 0, 0));
