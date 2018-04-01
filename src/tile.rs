@@ -1,7 +1,9 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use world::InWorld;
-use sprite::tile::{TileSprite, TileSpritesheet};
+use sdl2::rect::Rect;
+use sprite::tile::{TileLayout, TileSprite, TileSpritesheet};
+use sprite::SpritesheetLayout;
 
 pub struct Tile<'s> {
     spritesheet: &'s TileSpritesheet<'s>,
@@ -28,17 +30,18 @@ impl<'s> Tile<'s> {
 }
 
 impl<'a> InWorld for Tile<'a> {
-    fn world_position(&self) -> (i32, i32) {
-        (self.world_posx, self.world_posy)
+    fn world_rect(&self) -> Rect {
+        let dimensions = <TileLayout as SpritesheetLayout>::get_dimensions();
+        Rect::new(self.world_posx, self.world_posy, dimensions.0, dimensions.1)
     }
 
-    fn render(&self, canvas: &mut Canvas<Window>) {
+    fn render(&self, canvas: &mut Canvas<Window>, screen_x: i32, screen_y: i32) {
         self.spritesheet.draw_sprite_with_scale(
             canvas,
             &self.sprite,
             self.scale,
-            self.world_posx,
-            self.world_posy,
+            screen_x,
+            screen_y,
         );
     }
 }

@@ -1,14 +1,15 @@
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::event::Event;
+use sdl2::rect::Rect;
 
 pub trait InWorld {
-    fn world_position(&self) -> (i32, i32);
+    fn world_rect(&self) -> Rect;
 
     fn update(&mut self) {}
     fn update_with_event(&mut self, &Event) {}
 
-    fn render(&self, &mut Canvas<Window>) {}
+    fn render(&self, &mut Canvas<Window>, i32, i32) {}
 }
 
 pub struct World<'i> {
@@ -36,9 +37,13 @@ impl<'i> World<'i> {
         }
     }
 
-    pub fn render(&self, canvas: &mut Canvas<Window>) {
+    pub fn render(&self, canvas: &mut Canvas<Window>, viewport: Rect) {
         for item in &self.items {
-            item.render(canvas);
+            let world_rect = item.world_rect();
+
+            if viewport.has_intersection(world_rect) {
+                item.render(canvas, world_rect.x - viewport.x, world_rect.y - viewport.y);
+            }
         }
     }
 }

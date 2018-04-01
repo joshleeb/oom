@@ -17,9 +17,10 @@ use std::thread;
 use std::time::Duration;
 
 mod animation;
-mod tile;
+mod camera;
 mod player;
 mod sprite;
+mod tile;
 mod world;
 
 const SCREEN_HEIGHT: u32 = 600;
@@ -49,7 +50,6 @@ fn main() {
 
     let player_spritesheet = OrbSpritesheet::from_spritesheet(&texture_creator, "assets/orb.png");
     let mut player = Player::new(&player_spritesheet);
-    world.add_item(Box::new(&mut player));
 
     let tile_spritesheet = TileSpritesheet::from_spritesheet(&texture_creator, "assets/tiles.png");
     let mut grass = Tile::new(&tile_spritesheet, TileSprite::Grass);
@@ -60,6 +60,7 @@ fn main() {
 
     'main: loop {
         world.update();
+        player.update();
 
         for event in events.poll_iter() {
             match event {
@@ -72,10 +73,11 @@ fn main() {
             };
 
             world.update_with_event(&event);
+            player.update_with_event(&event);
         }
 
         clear_canvas(&mut canvas);
-        world.render(&mut canvas);
+        camera::render(&mut canvas, &player, &world);
         canvas.present();
 
         thread::sleep(Duration::from_millis(1000 / 60));

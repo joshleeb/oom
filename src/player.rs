@@ -1,10 +1,11 @@
 use animation::Animation;
 use sdl2::render::Canvas;
+use sdl2::keyboard::Keycode;
+use sdl2::event::Event;
 use sdl2::video::Window;
 use sprite::SpritesheetLayout;
 use sprite::orb::{OrbLayout, OrbSprite, OrbSpritesheet};
 use std::time::Duration;
-use world::InWorld;
 
 pub struct Player<'s> {
     spritesheet: &'s OrbSpritesheet<'s>,
@@ -42,20 +43,28 @@ impl<'s> Player<'s> {
             ),
         }
     }
-}
 
-impl<'a> InWorld for Player<'a> {
-    fn update(&mut self) {
+    pub fn update(&mut self) {
         if let Some(sprite) = self.animation.next_frame() {
             self.current_sprite = sprite.clone();
         }
     }
 
-    fn world_position(&self) -> (i32, i32) {
+    pub fn update_with_event(&mut self, event: &Event) {
+        match event {
+            Event::KeyDown {
+                keycode: Some(keycode),
+                ..
+            } => self.handle_keydown(keycode),
+            _ => {}
+        }
+    }
+
+    pub fn world_position(&self) -> (i32, i32) {
         (self.world_posx, self.world_posy)
     }
 
-    fn render(&self, canvas: &mut Canvas<Window>) {
+    pub fn render(&self, canvas: &mut Canvas<Window>) {
         let screen_size = canvas.output_size().unwrap();
         let sprite_size = <OrbLayout as SpritesheetLayout>::get_dimensions();
 
@@ -66,5 +75,15 @@ impl<'a> InWorld for Player<'a> {
             ((screen_size.0 - sprite_size.0) / 2) as i32, // Screen posX
             ((screen_size.1 - sprite_size.1) / 2) as i32, // Screen posY
         );
+    }
+
+    fn handle_keydown(&mut self, keycode: &Keycode) {
+        match keycode {
+            Keycode::W => self.world_posy -= self.movement_speed,
+            Keycode::A => self.world_posx -= self.movement_speed,
+            Keycode::S => self.world_posy += self.movement_speed,
+            Keycode::D => self.world_posx += self.movement_speed,
+            _ => {}
+        }
     }
 }
