@@ -1,7 +1,6 @@
 use sdl2::image::LoadSurface;
 use tile::Tile;
-use sprite::tile::{TileLayout, TileSprite, TileSpritesheet};
-use sprite::SpritesheetLayout;
+use sprite::tile::{TileSprite, TileSpritesheet};
 use sdl2::surface::Surface;
 
 pub struct Map<'a> {
@@ -17,7 +16,7 @@ impl<'a> Map<'a> {
         let pixelbuf = surface.without_lock().unwrap();
         let rgb_values: Vec<u8> = pixelbuf.iter().cloned().collect();
 
-        let sprite_size = <TileLayout as SpritesheetLayout>::get_dimensions();
+        let sprite_size = Tile::size();
 
         for color in rgb_values.chunks(3) {
             if let Some(sprite) = color_to_sprite(color[0], color[1], color[2]) {

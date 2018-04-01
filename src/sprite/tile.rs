@@ -27,11 +27,11 @@ impl SpritesheetLayout for TileLayout {
     fn get_sprite(spr: &Self::Sprite) -> Rect {
         let grid = match *spr {
             TileSprite::Cobblestone => (1, 0),
-            TileSprite::Grass => (3, 1),
-            TileSprite::Lava => (2, 9),
+            TileSprite::Grass => (0, 0),
+            TileSprite::Lava => (11, 18),
             TileSprite::Sand => (2, 1),
-            TileSprite::Water => (5, 2),
-            TileSprite::Wood => (0, 2),
+            TileSprite::Water => (10, 18),
+            TileSprite::Wood => (4, 0),
         };
 
         Rect::new(

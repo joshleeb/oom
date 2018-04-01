@@ -7,16 +7,14 @@ use sprite::SpritesheetLayout;
 use sprite::orb::{OrbLayout, OrbSprite, OrbSpritesheet};
 use std::time::Duration;
 
+const SCALE: u32 = 2;
+
 pub struct Player<'s> {
     spritesheet: &'s OrbSpritesheet<'s>,
     current_sprite: OrbSprite,
-
-    scale: u32,
     pub movement_speed: i32,
-
     pub world_posx: i32,
     pub world_posy: i32,
-
     animation: Animation<OrbSprite>,
 }
 
@@ -26,7 +24,6 @@ impl<'s> Player<'s> {
             spritesheet,
             current_sprite: OrbSprite::Large,
 
-            scale: 2,
             movement_speed: 12,
 
             world_posx: 100,
@@ -71,7 +68,7 @@ impl<'s> Player<'s> {
         self.spritesheet.draw_sprite_with_scale(
             canvas,
             &self.current_sprite,
-            self.scale,
+            SCALE,
             ((screen_size.0 - sprite_size.0) / 2) as i32, // Screen posX
             ((screen_size.1 - sprite_size.1) / 2) as i32, // Screen posY
         );

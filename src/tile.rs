@@ -5,6 +5,8 @@ use sdl2::rect::Rect;
 use sprite::tile::{TileLayout, TileSprite, TileSpritesheet};
 use sprite::SpritesheetLayout;
 
+const SCALE: u32 = 2;
+
 pub struct Tile<'s> {
     spritesheet: &'s TileSpritesheet<'s>,
     sprite: TileSprite,
@@ -25,10 +27,15 @@ impl<'s> Tile<'s> {
         Tile {
             spritesheet,
             sprite,
-            scale: 2,
+            scale: SCALE,
             world_posx,
             world_posy,
         }
+    }
+
+    pub fn size() -> (u32, u32) {
+        let spritesheet_size = <TileLayout as SpritesheetLayout>::get_dimensions();
+        (SCALE * spritesheet_size.0, SCALE * spritesheet_size.1)
     }
 }
 
