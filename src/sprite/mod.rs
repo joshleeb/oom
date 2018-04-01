@@ -5,7 +5,7 @@ use sdl2::video::{Window, WindowContext};
 use std::marker::PhantomData;
 use std::path::Path;
 
-pub mod pokemon;
+pub mod orb;
 
 pub trait SpritesheetLayout {
     type Sprite;

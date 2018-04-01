@@ -8,7 +8,7 @@ use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use sprite::pokemon::PokemonSpritesheet;
+use sprite::orb::OrbSpritesheet;
 use std::thread;
 use std::time::Duration;
 
@@ -39,14 +39,15 @@ fn main() {
     let mut canvas = window.into_canvas().accelerated().build().unwrap();
     let texture_creator = canvas.texture_creator();
 
-    let spritesheet =
-        PokemonSpritesheet::from_spritesheet(&texture_creator, "assets/professor.png");
+    let spritesheet = OrbSpritesheet::from_spritesheet(&texture_creator, "assets/orb.png");
     let mut player = Player::new(spritesheet);
 
     clear_canvas(&mut canvas);
     canvas.present();
 
     'main: loop {
+        player.update_animation();
+
         for event in events.poll_iter() {
             match event {
                 Event::Quit { .. }
@@ -56,8 +57,6 @@ fn main() {
                 } => break 'main,
                 _ => {}
             };
-
-            player.update(event);
         }
 
         clear_canvas(&mut canvas);
