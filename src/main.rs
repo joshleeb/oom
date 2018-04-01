@@ -5,16 +5,19 @@ extern crate sdl2;
 
 use player::Player;
 use sdl2::event::Event;
+use tile::Tile;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use world::World;
 use sprite::orb::OrbSpritesheet;
+use sprite::tile::{TileSprite, TileSpritesheet};
 use std::thread;
 use std::time::Duration;
 
 mod animation;
+mod tile;
 mod player;
 mod sprite;
 mod world;
@@ -42,11 +45,15 @@ fn main() {
     let mut canvas = window.into_canvas().accelerated().build().unwrap();
     let texture_creator = canvas.texture_creator();
 
-    let spritesheet = OrbSpritesheet::from_spritesheet(&texture_creator, "assets/orb.png");
-    let mut player = Player::new(spritesheet);
-
     let mut world = World::new();
+
+    let player_spritesheet = OrbSpritesheet::from_spritesheet(&texture_creator, "assets/orb.png");
+    let mut player = Player::new(player_spritesheet);
     world.add_item(Box::new(&mut player));
+
+    let tile_spritesheet = TileSpritesheet::from_spritesheet(&texture_creator, "assets/tiles.png");
+    let mut grass = Tile::new(tile_spritesheet, TileSprite::Grass);
+    world.add_item(Box::new(&mut grass));
 
     clear_canvas(&mut canvas);
     canvas.present();

@@ -6,6 +6,7 @@ use std::marker::PhantomData;
 use std::path::Path;
 
 pub mod orb;
+pub mod tile;
 
 pub trait SpritesheetLayout {
     type Sprite;
