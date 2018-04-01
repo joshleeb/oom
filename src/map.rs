@@ -14,13 +14,12 @@ impl<'a> Map<'a> {
 
         let surface = Surface::from_file(path).unwrap();
         let pixelbuf = surface.without_lock().unwrap();
-        let rgb_values: Vec<u8> = pixelbuf.iter().cloned().collect();
 
         let sprite_size = Tile::size();
 
-        for color in rgb_values.chunks(3) {
+        for color in pixelbuf.to_vec().chunks(3) {
             if let Some(sprite) = color_to_sprite(color[0], color[1], color[2]) {
-                tiles.push(Tile::new(&spritesheet, sprite, world_pos.0, world_pos.1));
+                tiles.push(Tile::new(spritesheet, sprite, world_pos.0, world_pos.1));
             }
 
             world_pos.0 += sprite_size.0 as i32;

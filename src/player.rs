@@ -48,12 +48,12 @@ impl<'s> Player<'s> {
     }
 
     pub fn update_with_event(&mut self, event: &Event) {
-        match event {
-            Event::KeyDown {
-                keycode: Some(keycode),
-                ..
-            } => self.handle_keydown(keycode),
-            _ => {}
+        if let Event::KeyDown {
+            keycode: Some(keycode),
+            ..
+        } = event
+        {
+            self.handle_keydown(keycode)
         }
     }
 
