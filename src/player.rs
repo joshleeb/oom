@@ -7,7 +7,7 @@ use std::time::Duration;
 use world::InWorld;
 
 pub struct Player<'s> {
-    spritesheet: OrbSpritesheet<'s>,
+    spritesheet: &'s OrbSpritesheet<'s>,
     current_sprite: OrbSprite,
 
     scale: u32,
@@ -20,7 +20,7 @@ pub struct Player<'s> {
 }
 
 impl<'s> Player<'s> {
-    pub fn new(spritesheet: OrbSpritesheet<'s>) -> Self {
+    pub fn new(spritesheet: &'s OrbSpritesheet<'s>) -> Self {
         Player {
             spritesheet,
             current_sprite: OrbSprite::Large,

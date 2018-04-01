@@ -4,7 +4,7 @@ use world::InWorld;
 use sprite::tile::{TileSprite, TileSpritesheet};
 
 pub struct Tile<'s> {
-    spritesheet: TileSpritesheet<'s>,
+    spritesheet: &'s TileSpritesheet<'s>,
     sprite: TileSprite,
 
     scale: u32,
@@ -14,7 +14,7 @@ pub struct Tile<'s> {
 }
 
 impl<'s> Tile<'s> {
-    pub fn new(spritesheet: TileSpritesheet<'s>, sprite: TileSprite) -> Self {
+    pub fn new(spritesheet: &'s TileSpritesheet<'s>, sprite: TileSprite) -> Self {
         Tile {
             spritesheet,
             sprite,
