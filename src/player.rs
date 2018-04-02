@@ -2,10 +2,10 @@ use animation::Animation;
 use sdl2::render::Canvas;
 use std::cmp;
 use sdl2::keyboard::Keycode;
+use sdl2::rect::Rect;
 use sdl2::event::Event;
 use sdl2::video::Window;
 use sprite::SpritesheetLayout;
-use tile::Tile;
 use sprite::orb::{OrbLayout, OrbSprite, OrbSpritesheet};
 use std::time::Duration;
 
@@ -74,42 +74,29 @@ impl<'s> Player<'s> {
         (self.world_posx, self.world_posy)
     }
 
-    pub fn render(&self, canvas: &mut Canvas<Window>) {
-        let screen_size = canvas.output_size().unwrap();
-        let sprite_size = <OrbLayout as SpritesheetLayout>::get_dimensions();
-
+    pub fn render(&self, canvas: &mut Canvas<Window>, viewport: Rect) {
         self.spritesheet.draw(
             canvas,
             &self.current_sprite,
             SCALE,
-            ((screen_size.0 - sprite_size.0) / 2) as i32, // Screen posX
-            ((screen_size.1 - sprite_size.1) / 2) as i32, // Screen posY
+            self.world_posx - viewport.x,
+            self.world_posy - viewport.y,
         );
     }
 
     fn handle_keydown(&mut self, keycode: &Keycode) {
         match keycode {
-            Keycode::W => {
-                self.world_posy = cmp::max(
-                    -(Player::size().0 as i32 / (2 * SCALE as i32)),
-                    self.world_posy - self.movement_speed,
-                )
-            }
-            Keycode::A => {
-                self.world_posx = cmp::max(
-                    -(Player::size().1 as i32 / (2 * SCALE as i32)),
-                    self.world_posx - self.movement_speed,
-                )
-            }
+            Keycode::W => self.world_posy = cmp::max(0, self.world_posy - self.movement_speed),
+            Keycode::A => self.world_posx = cmp::max(0, self.world_posx - self.movement_speed),
             Keycode::S => {
                 self.world_posy = cmp::min(
-                    (self.world_dimensions.1 - Tile::size().1) as i32,
+                    (self.world_dimensions.1 - Player::size().1) as i32,
                     self.world_posy + self.movement_speed,
                 )
             }
             Keycode::D => {
                 self.world_posx = cmp::min(
-                    (self.world_dimensions.0 - Tile::size().0) as i32,
+                    (self.world_dimensions.0 - Player::size().0) as i32,
                     self.world_posx + self.movement_speed,
                 )
             }
