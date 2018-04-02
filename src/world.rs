@@ -16,11 +16,21 @@ pub trait InWorld {
 
 pub struct World<'a> {
     items: Vec<Tile<'a>>,
+    width: u32,
+    height: u32,
 }
 
 impl<'a> World<'a> {
     pub fn new(map: Map<'a>) -> Self {
-        World { items: map.tiles() }
+        World {
+            items: map.tiles,
+            width: map.width,
+            height: map.height,
+        }
+    }
+
+    pub fn dimensions(&self) -> (u32, u32) {
+        (self.width, self.height)
     }
 
     pub fn update(&mut self) {
@@ -39,9 +49,8 @@ impl<'a> World<'a> {
         for item in &self.items {
             let world_rect = item.world_rect();
 
-            if viewport.has_intersection(world_rect) {
-                item.render(canvas, world_rect.x - viewport.x, world_rect.y - viewport.y);
-            }
+            // TODO: optimise not to render items outside viewport.
+            item.render(canvas, world_rect.x - viewport.x, world_rect.y - viewport.y);
         }
     }
 }

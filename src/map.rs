@@ -4,7 +4,9 @@ use sprite::tile::{TileSprite, TileSpritesheet};
 use sdl2::surface::Surface;
 
 pub struct Map<'a> {
-    tiles: Vec<Tile<'a>>,
+    pub tiles: Vec<Tile<'a>>,
+    pub width: u32,
+    pub height: u32,
 }
 
 impl<'a> Map<'a> {
@@ -16,6 +18,8 @@ impl<'a> Map<'a> {
         let pixelbuf = surface.without_lock().unwrap();
 
         let sprite_size = Tile::size();
+        let world_width = surface.width() * sprite_size.0;
+        let world_height = surface.height() * sprite_size.1;
 
         for color in pixelbuf.to_vec().chunks(3) {
             if let Some(sprite) = color_to_sprite(color[0], color[1], color[2]) {
@@ -30,11 +34,11 @@ impl<'a> Map<'a> {
             }
         }
 
-        Map { tiles }
-    }
-
-    pub fn tiles(self) -> Vec<Tile<'a>> {
-        self.tiles
+        Map {
+            tiles,
+            width: world_width,
+            height: world_height,
+        }
     }
 }
 

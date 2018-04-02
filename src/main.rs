@@ -52,7 +52,7 @@ fn main() {
     let mut world = World::new(Map::from_pixelmap(&tile_spritesheet, "assets/map.png"));
 
     let player_spritesheet = OrbSpritesheet::new(&texture_creator, "assets/orb.png");
-    let mut player = Player::new(&player_spritesheet);
+    let mut player = Player::new(&player_spritesheet, world.dimensions(), 0, 0);
 
     clear_canvas(&mut canvas);
     canvas.present();

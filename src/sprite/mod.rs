@@ -32,7 +32,7 @@ impl<'t, SL: SpritesheetLayout> Spritesheet<'t, SL> {
         }
     }
 
-    pub fn draw_sprite_with_scale(
+    pub fn draw(
         &self,
         canvas: &mut Canvas<Window>,
         sprite: &SL::Sprite,
@@ -41,14 +41,9 @@ impl<'t, SL: SpritesheetLayout> Spritesheet<'t, SL> {
         y: i32,
     ) {
         let dimensions = <SL as SpritesheetLayout>::get_dimensions();
-        let screen_rect = Rect::new(x, y, dimensions.0 * scale, dimensions.1 * scale);
+        let src = <SL as SpritesheetLayout>::get_sprite(sprite);
+        let dst = Rect::new(x, y, dimensions.0 * scale, dimensions.1 * scale);
 
-        canvas
-            .copy(
-                &self.texture,
-                Some(<SL as SpritesheetLayout>::get_sprite(sprite)),
-                Some(screen_rect),
-            )
-            .unwrap();
+        canvas.copy(&self.texture, Some(src), Some(dst)).unwrap();
     }
 }
