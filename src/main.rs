@@ -7,7 +7,7 @@ extern crate sdl2;
 use player::Player;
 use sdl2::event::Event;
 use map::Map;
-use sdl2::keyboard::Keycode;
+use sdl2::keyboard::{KeyboardState, Keycode};
 use sdl2::pixels::Color;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -58,9 +58,6 @@ fn main() {
     canvas.present();
 
     'main: loop {
-        world.update();
-        player.update();
-
         for event in events.poll_iter() {
             match event {
                 Event::Quit { .. }
@@ -71,9 +68,10 @@ fn main() {
                 _ => {}
             };
 
-            world.update_with_event(&event);
-            player.update_with_event(&event);
+            world.event_update(&event);
         }
+        world.update();
+        player.update(&KeyboardState::new(&events));
 
         clear_canvas(&mut canvas);
         camera::render(&mut canvas, &player, &world);

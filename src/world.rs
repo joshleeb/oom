@@ -9,7 +9,7 @@ pub trait InWorld {
     fn world_rect(&self) -> Rect;
 
     fn update(&mut self) {}
-    fn update_with_event(&mut self, &Event) {}
+    fn event_update(&mut self, &Event) {}
 
     fn render(&self, &mut Canvas<Window>, i32, i32) {}
 }
@@ -39,9 +39,9 @@ impl<'a> World<'a> {
         }
     }
 
-    pub fn update_with_event(&mut self, event: &Event) {
+    pub fn event_update(&mut self, event: &Event) {
         for item in &mut self.items {
-            item.update_with_event(event);
+            item.event_update(event);
         }
     }
 
