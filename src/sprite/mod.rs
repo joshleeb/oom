@@ -1,6 +1,7 @@
 use sdl2::image::LoadTexture;
 use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture, TextureCreator};
+use sdl2::pixels::Color;
 use sdl2::video::{Window, WindowContext};
 use std::marker::PhantomData;
 use std::path::Path;
@@ -39,11 +40,19 @@ impl<'t, SL: SpritesheetLayout> Spritesheet<'t, SL> {
         scale: u32,
         x: i32,
         y: i32,
+        show_perimeter: bool,
     ) {
         let dimensions = <SL as SpritesheetLayout>::get_dimensions();
         let src = <SL as SpritesheetLayout>::get_sprite(sprite);
         let dst = Rect::new(x, y, dimensions.0 * scale, dimensions.1 * scale);
 
+        // Draw sprite.
         canvas.copy(&self.texture, Some(src), Some(dst)).unwrap();
+
+        // Draw perimeter.
+        if show_perimeter {
+            canvas.set_draw_color(Color::RGB(0, 0, 0));
+            canvas.draw_rect(dst).unwrap();
+        }
     }
 }

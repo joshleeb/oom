@@ -47,6 +47,6 @@ impl<'a> InWorld for Tile<'a> {
 
     fn render(&self, canvas: &mut Canvas<Window>, screen_x: i32, screen_y: i32) {
         self.spritesheet
-            .draw(canvas, &self.sprite, self.scale, screen_x, screen_y);
+            .draw(canvas, &self.sprite, self.scale, screen_x, screen_y, false);
     }
 }

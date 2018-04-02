@@ -65,13 +65,14 @@ impl<'s> Player<'s> {
         self.update_world_position();
     }
 
-    pub fn render(&self, canvas: &mut Canvas<Window>, viewport: Rect) {
+    pub fn render(&self, canvas: &mut Canvas<Window>, viewport: Rect, show_perimeter: bool) {
         self.spritesheet.draw(
             canvas,
             &self.current_sprite,
             SCALE,
             self.world_posx - viewport.x,
             self.world_posy - viewport.y,
+            show_perimeter,
         );
     }
 

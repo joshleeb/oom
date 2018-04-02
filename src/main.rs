@@ -57,9 +57,15 @@ fn main() {
     clear_canvas(&mut canvas);
     canvas.present();
 
+    let mut show_perimeter = false;
+
     'main: loop {
         for event in events.poll_iter() {
             match event {
+                Event::KeyDown {
+                    keycode: Some(Keycode::P),
+                    ..
+                } => show_perimeter = !show_perimeter,
                 Event::Quit { .. }
                 | Event::KeyDown {
                     keycode: Some(Keycode::Escape),
@@ -74,7 +80,7 @@ fn main() {
         player.update(&KeyboardState::new(&events));
 
         clear_canvas(&mut canvas);
-        camera::render(&mut canvas, &player, &world);
+        camera::render(&mut canvas, &player, &world, show_perimeter);
         canvas.present();
 
         thread::sleep(Duration::from_millis(1000 / 60));

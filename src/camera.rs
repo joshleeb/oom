@@ -5,13 +5,13 @@ use std::cmp;
 use sdl2::video::Window;
 use world::World;
 
-pub fn render(canvas: &mut Canvas<Window>, player: &Player, world: &World) {
+pub fn render(canvas: &mut Canvas<Window>, player: &Player, world: &World, show_perimeter: bool) {
     let screen_size = canvas.output_size().unwrap();
     let world_pos = world_position(world, player, screen_size);
     let viewport = Rect::new(world_pos.0, world_pos.1, screen_size.0, screen_size.1);
 
     world.render(canvas, viewport);
-    player.render(canvas, viewport);
+    player.render(canvas, viewport, show_perimeter);
 }
 
 fn world_position(world: &World, player: &Player, screen_size: (u32, u32)) -> (i32, i32) {
