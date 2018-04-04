@@ -9,7 +9,7 @@ use sprite::orb::{OrbLayout, OrbSprite, OrbSpritesheet};
 use std::time::Duration;
 
 const SCALE: u32 = 2;
-const MOVEMENT_SPEED: i32 = 4;
+const MOVEMENT_SPEED: i32 = 8;
 const SHOULD_ANIMATE: bool = true;
 
 pub struct Player<'s> {
